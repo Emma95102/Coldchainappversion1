@@ -29,6 +29,20 @@ function App() {
         setCarbon={setCarbon}
       />
     );
+  if (page === "home") {
+    return <SmartDashboard goTo={setPage} />;
+  }
+  if (!loggedIn) {
+    return <LoginScreen onLogin={() => {
+      setLoggedIn(true);
+      setPage("home"); // 登入後跳到智慧儀表板
+    }} />;
+  }
+  if (page === "fuel") return <FuelPage goBack={() => setPage("home")} />;
+  if (page === "route") return <RouteOptimization goBack={() => setPage("home")} />;
+  if (page === "footprint") return <CarbonFootprint goBack={() => setPage("home")} />;
+
+  if (page === "pcm") return <PCMModule goBack={() => setPage("home")} />;
 
   if (page === "temp") return <TemperaturePage goBack={() => setPage("dashboard")} />;
   if (page === "carbon")
@@ -142,6 +156,7 @@ function Dashboard({ setPage, from, to, setFrom, setTo, setDistance, setCarbon }
 
       <div className="button-group">
         <button onClick={handleConfirmTask}>確認任務</button>
+        <button onClick={() => setPage("home")}>進入儀表板</button>
         <button onClick={() => setPage("temp")}>即時溫控</button>
         <button onClick={() => setPage("carbon")}>碳排追蹤</button>
         <button onClick={() => setPage("report")}>異常回報</button>
@@ -149,12 +164,150 @@ function Dashboard({ setPage, from, to, setFrom, setTo, setDistance, setCarbon }
     </div>
   );
 }
+//儀表板畫面
+function SmartDashboard({ goTo }) {
+  return (
+    <div className="screen">
+      <h2>智慧儀表板</h2>
 
+      <div className="dashboard-section clickable" onClick={() => goTo("fuel")}>
+        <h3>車輛耗油檢測</h3>
+        <ul>
+          <li>即時追蹤運輸車隊油耗數據</li>
+          <li>每公里平均碳排為 <strong>0.25 公斤</strong></li>
+        </ul>
+      </div>
+
+      <div className="dashboard-section clickable" onClick={() => goTo("pcm")}>
+        <h3>PCM能源追蹤</h3>
+        <ul>
+          <li>監控各設備耗損程度</li>
+          <li>標準化 PCM 能源消耗指標</li>
+        </ul>
+      </div>
+
+      <div className="dashboard-section clickable" onClick={() => goTo("route")}>
+        <h3>路線配送優化</h3>
+        <ul>
+          <li>運用大數據分析最佳路徑</li>
+          <li>減少不必要的里程與碳排</li>
+        </ul>
+      </div>
+
+      <div className="dashboard-section clickable" onClick={() => goTo("footprint")}>
+        <h3>碳足跡計算</h3>
+        <ul>
+          <li>自動計算每筆訂單碳排</li>
+          <li>提供詳細碳排報表</li>
+        </ul>
+      </div>
+
+      <div className="button-group">
+        <button onClick={() => goTo("dashboard")}>進入任務追蹤</button>
+        <button onClick={() => goTo("carbon")}>查看碳排詳情</button>
+        <button onClick={() => goTo("pcm")}>查看 PCM 模組</button>
+      </div>
+    </div>
+  );
+}
+function FuelPage({ goBack }) {
+  return (
+    <div className="screen">
+      <h2>車輛耗油檢測</h2>
+      <p>目前頁面為模擬介面，可顯示即時油耗圖表、平均碳排與車隊分布等資訊。</p>
+      {/* 可放入圖表元件、圖示、地圖等等 */}
+      <button onClick={goBack}>返回儀表板</button>
+    </div>
+  );
+}
+function RouteOptimization({ goBack }) {
+  return (
+    <div className="screen">
+      <h2>路線配送優化</h2>
+      <p>這裡可以放入最佳化路線圖示、里程節省統計或車隊路徑。</p>
+      <button onClick={goBack}>返回儀表板</button>
+    </div>
+  );
+}
+function CarbonFootprint({ goBack }) {
+  return (
+    <div className="screen">
+      <h2>碳足跡計算</h2>
+      <p>這裡可顯示碳排放報表、每張訂單碳排、圖表等資訊。</p>
+      <button onClick={goBack}>返回儀表板</button>
+    </div>
+  );
+}
+
+
+//PCM模組
+function PCMModule({ goBack }) {
+  return (
+    <div className="screen fade-in">
+      <h2>PCM 模組總覽</h2>
+
+      <div className="pcm-card">
+        <h3>1. 短鏈即配模組</h3>
+        <ul>
+          <li>配送地點：都市門市</li>
+          <li>即時預冷完成：✔</li>
+          <li>持溫時間（PCM）：<strong>6 小時</strong></li>
+          <li>溫度偏差：±0.5°C</li>
+        </ul>
+      </div>
+
+      <div className="pcm-card">
+        <h3>2. 混溫倉儲模組</h3>
+        
+        <ul>
+          <li>多溫區：冷藏 / 冷凍</li>
+          <li>PCM 隔溫穩定</li>
+          <li>本月省電：<strong>54.7 kWh</strong></li>
+          <li>冷媒減少：<strong>28%</strong></li>
+        </ul>
+      </div>
+
+      <div className="pcm-card">
+        <h3>3. 智慧保溫箱模組</h3>
+        
+        <ul>
+          <li>核心技術：相變材料（PCM）</li>
+          <li>無電持溫時間：<strong>18 小時</strong></li>
+          <li>穩定度：±0.3°C</li>
+          <li>系統狀態：<span style={{ color: "green" }}>正常</span></li>
+        </ul>
+      </div>
+
+      <button onClick={goBack}>返回儀表板</button>
+    </div>
+  );
+}
 // 即時溫控頁面
 function TemperaturePage({ goBack }) {
   const [temperature, setTemperature] = useState(4.0);
   const [lastUpdated, setLastUpdated] = useState("2025-04-30 14:20");
   const safeRange = { min: 2, max: 8 };
+  useEffect(() => {
+    const interval = setInterval(() => {
+      const now = new Date();
+      const formatted = now.getFullYear() +
+        '-' + String(now.getMonth() + 1).padStart(2, '0') +
+        '-' + String(now.getDate()).padStart(2, '0') +
+        ' ' + String(now.getHours()).padStart(2, '0') +
+        ':' + String(now.getMinutes()).padStart(2, '0');
+      setLastUpdated(formatted);
+    }, 60000);
+    // 每 1 分鐘更新一次時間
+      const now = new Date();
+        const formatted = now.getFullYear() +
+          '-' + String(now.getMonth() + 1).padStart(2, '0') +
+          '-' + String(now.getDate()).padStart(2, '0') +
+          ' ' + String(now.getHours()).padStart(2, '0') +
+          ':' + String(now.getMinutes()).padStart(2, '0');
+        setLastUpdated(formatted);
+
+        return () => clearInterval(interval); // 清除定時器
+      }, []);
 
   const getStatus = () => {
     if (temperature < safeRange.min) return "過低";
