@@ -212,7 +212,7 @@ function SmartDashboard({ goTo }) {
         <h3>車輛耗油檢測</h3>
         <ul>
           <li>即時追蹤運輸車隊油耗數據</li>
-          <li>每公里平均碳排為 <strong>0.25 公斤</strong></li>
+         
         </ul>
       </div>
 
