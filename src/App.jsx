@@ -1,6 +1,15 @@
 import React, { useState } from "react";
 import "./App.css";
 import { useEffect } from "react"; 
+import {
+  LineChart,
+  Line,
+  XAxis,
+  YAxis,
+  Tooltip,
+  CartesianGrid,
+  ResponsiveContainer,
+} from "recharts";
 
 // 主元件
 function App() {
@@ -211,15 +220,38 @@ function SmartDashboard({ goTo }) {
   );
 }
 function FuelPage({ goBack }) {
+  const [data, setData] = useState([]);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      const now = new Date();
+      const time = `${now.getHours()}:${String(now.getMinutes()).padStart(2, '0')}:${String(now.getSeconds()).padStart(2, '0')}`;
+      const fuel = (Math.random() * 2 + 5).toFixed(2); // 模擬油耗數據
+      setData((prev) => [...prev.slice(-9), { time, fuel: parseFloat(fuel) }]);
+    }, 10000);
+    return () => clearInterval(interval);
+  }, []);
+
   return (
     <div className="screen">
       <h2>車輛耗油檢測</h2>
-      <p>目前頁面為模擬介面，可顯示即時油耗圖表、平均碳排與車隊分布等資訊。</p>
-      {/* 可放入圖表元件、圖示、地圖等等 */}
+      <p>即時油耗圖表：</p>
+      <div style={{ width: "100%", height: 300 }}>
+        <ResponsiveContainer>
+          <LineChart data={data}>
+            <XAxis dataKey="time" />
+            <YAxis unit=" L" />
+            <Tooltip />
+            <CartesianGrid stroke="#ccc" />
+            <Line type="monotone" dataKey="fuel" stroke="#0070f3" />
+          </LineChart>
+        </ResponsiveContainer>
+      </div>
       <button onClick={goBack}>返回儀表板</button>
     </div>
   );
 }
+
 function RouteOptimization({ goBack }) {
   return (
     <div className="screen">
@@ -258,7 +290,7 @@ function PCMModule({ goBack }) {
 
       <div className="pcm-card">
         <h3>2. 混溫倉儲模組</h3>
-        
+
         <ul>
           <li>多溫區：冷藏 / 冷凍</li>
           <li>PCM 隔溫穩定</li>
@@ -269,7 +301,7 @@ function PCMModule({ goBack }) {
 
       <div className="pcm-card">
         <h3>3. 智慧保溫箱模組</h3>
-        
+
         <ul>
           <li>核心技術：相變材料（PCM）</li>
           <li>無電持溫時間：<strong>18 小時</strong></li>
@@ -285,29 +317,25 @@ function PCMModule({ goBack }) {
 // 即時溫控頁面
 function TemperaturePage({ goBack }) {
   const [temperature, setTemperature] = useState(4.0);
-  const [lastUpdated, setLastUpdated] = useState("2025-04-30 14:20");
+  const [lastUpdated, setLastUpdated] = useState("");
+  const [data, setData] = useState([]);
   const safeRange = { min: 2, max: 8 };
-  useEffect(() => {
-    const interval = setInterval(() => {
-      const now = new Date();
-      const formatted = now.getFullYear() +
-        '-' + String(now.getMonth() + 1).padStart(2, '0') +
-        '-' + String(now.getDate()).padStart(2, '0') +
-        ' ' + String(now.getHours()).padStart(2, '0') +
-        ':' + String(now.getMinutes()).padStart(2, '0');
-      setLastUpdated(formatted);
-    }, 60000);
-    // 每 1 分鐘更新一次時間
-      const now = new Date();
-        const formatted = now.getFullYear() +
-          '-' + String(now.getMonth() + 1).padStart(2, '0') +
-          '-' + String(now.getDate()).padStart(2, '0') +
-          ' ' + String(now.getHours()).padStart(2, '0') +
-          ':' + String(now.getMinutes()).padStart(2, '0');
-        setLastUpdated(formatted);
+  
 
-        return () => clearInterval(interval); // 清除定時器
-      }, []);
+  useEffect(() => {
+    const updateTemperature = () => {
+      const temp = parseFloat((Math.random() * 6 + 2).toFixed(1)); // 模擬 2~8°C
+      const now = new Date();
+      const time = `${now.getHours()}:${String(now.getMinutes()).padStart(2, "0")}:${String(now.getSeconds()).padStart(2, "0")}`;
+      setTemperature(temp);
+      setLastUpdated(`${now.toLocaleDateString()} ${time}`);
+      setData((prev) => [...prev.slice(-9), { time, temperature: temp }]);
+    };
+
+    updateTemperature(); // 初始化
+    const interval = setInterval(updateTemperature, 10000); // 每 10 秒更新一次
+    return () => clearInterval(interval);
+  }, []);
 
   const getStatus = () => {
     if (temperature < safeRange.min) return "過低";
@@ -321,11 +349,26 @@ function TemperaturePage({ goBack }) {
       <p>貨艙溫度：<strong>{temperature}°C</strong></p>
       <p>狀態判斷：<strong>{getStatus()}</strong></p>
       <p>上次更新時間：{lastUpdated}</p>
-      <p>溫度曲線圖（模擬中）</p>
-      <button onClick={goBack}>返回主畫面</button>
+
+      <div style={{ width: "100%", height: 300, marginTop: "20px" }}>
+        <ResponsiveContainer>
+          <LineChart data={data}>
+            <XAxis dataKey="time" />
+            <YAxis domain={[0, 10]} unit="°C" />
+            <Tooltip />
+            <CartesianGrid stroke="#ccc" />
+            <Line type="monotone" dataKey="temperature" stroke="#e91e63" />
+          </LineChart>
+        </ResponsiveContainer>
+      </div>
+
+      <button onClick={goBack} style={{ marginTop: "20px" }}>
+        返回主畫面
+      </button>
     </div>
   );
 }
+
 
 // 碳排追蹤頁面
 function CarbonTracker({ goBack, from, to, distance, carbon }) {
