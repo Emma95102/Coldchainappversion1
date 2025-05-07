@@ -20,6 +20,16 @@ function App() {
   const [to, setTo] = useState("");
   const [distance, setDistance] = useState(0);
   const [carbon, setCarbon] = useState(0);
+  const [showSplash, setShowSplash] = useState(true);
+  
+
+  if (showSplash) {
+    return <SplashScreen onFinish={() => setShowSplash(false)} />;
+  }
+
+  if (!loggedIn) {
+    return <LoginScreen onLogin={() => setLoggedIn(true)} />;
+  }
 
   if (!loggedIn) {
     return <LoginScreen onLogin={() => setLoggedIn(true)} />;
@@ -67,6 +77,24 @@ function App() {
   if (page === "report") return <ErrorReport goBack={() => setPage("dashboard")} />;
   return <div>未知頁面</div>;
 }
+//首頁
+function SplashScreen({ onFinish }) {
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      onFinish();
+    }, 3500); // 顯示 3.5 秒
+    return () => clearTimeout(timer);
+  }, [onFinish]);
+
+  return (
+    <div className="splash-screen">
+      <h1>🚛 快樂送PCM冷鏈智慧系統</h1>
+      <p>登入</p>
+      <div className="spinner"></div>
+    </div>
+  );
+}
+
 
 // 登入畫面
 function LoginScreen({ onLogin }) {
@@ -75,6 +103,7 @@ function LoginScreen({ onLogin }) {
 
   return (
     <div className="screen">
+      
       <h2>冷鏈司機登入</h2>
       <input placeholder="工號" value={phone} onChange={(e) => setPhone(e.target.value)} />
       <input placeholder="姓名" value={code} onChange={(e) => setCode(e.target.value)} />

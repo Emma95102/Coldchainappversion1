@@ -1,123 +1,248 @@
-/* App.css */
+/* 全局設定 */
+/* 引入 Google Font：Orbitron */
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600&display=swap');
+
+body {
+  font-family: 'Zen Dots', sans-serif;
+  background: linear-gradient(to right, #f8f8f8, #f1f1f1);
+}
+
+/* 標題加強：發光效果 */
+h2, h3 {
+  letter-spacing: 0.8px;
+  text-shadow: 0 0 3px rgba(0, 117, 74, 0.3);
+}
+
+/* 主畫面容器增加邊框線條裝飾 */
+.screen {
+  border: 1px solid #ddd;
+  border-radius: 14px;
+  padding: 30px;
+  position: relative;
+  background: #ffffff;
+  box-shadow: 0 0 20px rgba(0,0,0,0.05);
+  overflow: hidden;
+}
+
+/* 裝飾線條：上、左邊角的科技線 */
+.screen::before,
+.screen::after {
+  content: "";
+  position: absolute;
+  border: 8px solid #00754a;
+  width: 80px;
+  height: 80px;
+}
+
+.screen::before {
+  top: 0;
+  left: 0;
+  border-right: none;
+  border-bottom: none;
+}
+
+.screen::after {
+  bottom: 0;
+  right: 0;
+  border-left: none;
+  border-top: none;
+}
+
+/* 儀表板區塊卡片升級 */
+.dashboard-section {
+  background: linear-gradient(135deg, #ffffff, #f7f7f7);
+  border: 1px solid #ccc;
+  border-left: 6px solid #f37021;
+  padding: 20px;
+  border-radius: 10px;
+  margin-bottom: 20px;
+  transition: box-shadow 0.3s ease;
+}
+
+.dashboard-section:hover {
+  box-shadow: 0 0 10px rgba(0, 117, 74, 0.3);
+}
+
+/* 酷一點的按鈕：帶 Glow 效果 */
+button {
+  background-color: #ed1c24;
+  color: #fff;
+  padding: 10px 20px;
+  border: none;
+  font-size: 15px;
+  border-radius: 30px;
+  box-shadow: 0 0 10px rgba(255, 50, 50, 0.3);
+  transition: all 0.25s ease-in-out;
+}
+
+button:hover {
+  background-color: #c6000b;
+  transform: translateY(-2px);
+  box-shadow: 0 0 15px rgba(255, 50, 50, 0.5);
+}
 
 body {
   margin: 0;
-  font-family: "Segoe UI", "Noto Sans TC", sans-serif;
-  background: linear-gradient(to bottom right, #e6f0fa, #ffffff);
+  font-family: "Segoe UI", "Microsoft JhengHei", sans-serif;
+  background-color: #f8f8f8;
   color: #333;
 }
 
+/* 主畫面容器 */
 .screen {
-  max-width: 800px;
-  margin: 0 auto;
-  padding: 24px;
-  background-color: #ffffffcc;
-  border-radius: 16px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+  padding: 20px;
+  max-width: 900px;
+  margin: auto;
+  background-color: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
+/* 標題樣式 */
 h2 {
-  color: #2a4e96;
-  margin-bottom: 16px;
+  font-size: 28px;
+  margin-bottom: 20px;
+  color: #00754a; /* 7-11 綠 */
 }
 
-input,
-select,
-textarea {
+h3 {
+  font-size: 22px;
+  margin-top: 20px;
+  color: #f37021; /* 7-11 橘 */
+}
+
+/* 輸入欄位與下拉選單 */
+input, select, textarea {
   width: 100%;
   padding: 10px;
   margin-top: 8px;
   margin-bottom: 16px;
-  border: 1px solid #cbd5e1;
-  border-radius: 8px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
   font-size: 16px;
 }
 
-textarea {
-  resize: vertical;
-}
-
+/* 按鈕樣式 */
 button {
+  background-color: #ed1c24; /* 7-11 紅 */
+  color: #fff;
   padding: 10px 20px;
-  font-size: 16px;
-  background-color: #2a4e96;
-  color: white;
   border: none;
-  border-radius: 10px;
+  font-size: 16px;
+  margin: 5px;
+  border-radius: 6px;
   cursor: pointer;
-  margin-right: 10px;
   transition: background-color 0.2s ease-in-out;
 }
 
 button:hover {
-  background-color: #1d3b7a;
+  background-color: #c6000b;
 }
 
+/* 儀表板卡片 */
+.dashboard-section {
+  background-color: #f1f1f1;
+  padding: 15px;
+  margin-bottom: 15px;
+  border-left: 6px solid #00754a;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.dashboard-section:hover {
+  background-color: #e6f7f2;
+}
+
+.clickable {
+  transition: transform 0.1s;
+}
+
+.clickable:hover {
+  transform: translateY(-2px);
+}
+
+/* Button group 對齊 */
 .button-group {
-  margin-top: 16px;
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
+  margin-top: 20px;
 }
 
-ul {
-  padding-left: 20px;
-  margin-bottom: 16px;
+/* Tooltip 字體 */
+.recharts-tooltip-wrapper {
+  font-size: 14px;
 }
 
-p {
-  margin-bottom: 8px;
-}
-
-.dashboard-section {
-  margin-bottom: 20px;
-  padding: 15px;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  background: #f9f9f9;
-}
-
-.dashboard-section {
-  margin-bottom: 20px;
-  padding: 12px;
+/* 表格或圖表區塊 */
+.chart-container {
+  background-color: #fff;
   border: 1px solid #ddd;
   border-radius: 8px;
-  background-color: #f4f8fb;
-}
-.pcm-card {
-  background-color: #f6fbfb;
-  border: 1px solid #d9e2e2;
-  border-radius: 10px;
-  padding: 16px;
-  margin-bottom: 24px;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.08);
-  transition: transform 0.3s ease;
+  padding: 20px;
+  margin-top: 20px;
 }
 
-.pcm-card:hover {
-  transform: translateY(-4px);
+/* 回報選單樣式 */
+select, textarea {
+  background-color: #fff;
 }
 
-.pcm-card img {
-  width: 32px;
-  margin-bottom: 8px;
+/* 強調文字 */
+strong {
+  color: #00754a;
+}
+.tech-lines .line {
+  position: absolute;
+  background-color: #00754a;
+  opacity: 0.2;
+}
+.tech-lines .horizontal {
+  top: 50px;
+  left: 0;
+  width: 100%;
+  height: 1px;
+}
+.tech-lines .vertical {
+  top: 0;
+  left: 50px;
+  width: 1px;
+  height: 100%;
+}
+.splash-screen {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background: #00754a;
+  color: white;
+  font-family: 'Orbitron', sans-serif;
+  animation: fadeIn 0.8s ease-in-out;
 }
 
-.fade-in {
-  animation: fadeIn 0.5s ease-in-out;
+.splash-screen h1 {
+  font-size: 32px;
+  margin-bottom: 10px;
+}
+
+.spinner {
+  margin-top: 20px;
+  width: 40px;
+  height: 40px;
+  border: 4px solid #fff;
+  border-top: 4px solid #f37021;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
 }
 
 @keyframes fadeIn {
-  from { opacity: 0; transform: translateY(10px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-.clickable {
-  cursor: pointer;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  padding: 15px;
-  transition: box-shadow 0.2s ease;
-}
-.clickable:hover {
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  from { opacity: 0; }
+  to   { opacity: 1; }
 }
